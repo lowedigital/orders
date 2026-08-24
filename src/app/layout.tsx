@@ -1,26 +1,42 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import Link from 'next/link';
+import LogoutButton from '@/components/admin/LogoutButton';
 
-export const metadata: Metadata = {
-  title: "Journey Roasters",
-  description: "Track your Journey Roasters coffee order, from roast to doorstep.",
-};
+const NAV_ITEMS = [
+  { href: '/admin', label: 'Dashboard' },
+  { href: '/admin/orders', label: 'Orders' },
+  { href: '/admin/orders/new', label: 'New Order' },
+  { href: '/admin/inventory', label: 'Inventory' },
+  { href: '/admin/roast-batches', label: 'Roast Batches' },
+  { href: '/admin/customers', label: 'Customers' },
+];
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        {/* Loaded via a stylesheet link (not next/font/google) so the build
-            doesn't depend on outbound network access to Google Fonts. */}
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-full flex flex-col bg-cream text-espresso">{children}</body>
-    </html>
+    <div className="min-h-screen bg-cream">
+      <div className="flex min-h-screen flex-col md:flex-row">
+        <aside className="border-b border-sand bg-cream-card md:w-56 md:shrink-0 md:border-b-0 md:border-r">
+          <div className="px-5 py-5">
+            <p className="font-serif text-lg text-espresso">Journey Roasters</p>
+            <p className="text-xs uppercase tracking-wide text-roast-light">Admin</p>
+          </div>
+          <nav className="flex flex-wrap gap-1 px-3 pb-4 md:flex-col">
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-lg px-3 py-2 text-sm text-espresso-soft transition hover:bg-sand hover:text-espresso"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="px-3 pb-5 md:mt-auto">
+            <LogoutButton />
+          </div>
+        </aside>
+
+        <main className="flex-1 px-4 py-6 sm:px-8 sm:py-8">{children}</main>
+      </div>
+    </div>
   );
 }
