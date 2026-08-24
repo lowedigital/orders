@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf6f0;
+  --foreground: #2b1b12;
+
+  --color-cream: #faf6f0;
+  --color-cream-card: #fffdfa;
+  --color-espresso: #2b1b12;
+  --color-espresso-soft: #4a3222;
+  --color-roast: #6f4e37;
+  --color-roast-light: #8a6a4d;
+  --color-sand: #e8dfd3;
+  --color-sand-dark: #d8c9b5;
+  --color-gold: #b8863b;
+  --color-gold-soft: #e9d3a8;
+  --color-success: #3f6b3f;
+  --color-danger: #a6432f;
+
+  --font-serif-stack: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans-stack: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cream: var(--color-cream);
+  --color-cream-card: var(--color-cream-card);
+  --color-espresso: var(--color-espresso);
+  --color-espresso-soft: var(--color-espresso-soft);
+  --color-roast: var(--color-roast);
+  --color-roast-light: var(--color-roast-light);
+  --color-sand: var(--color-sand);
+  --color-sand-dark: var(--color-sand-dark);
+  --color-gold: var(--color-gold);
+  --color-gold-soft: var(--color-gold-soft);
+  --color-success: var(--color-success);
+  --color-danger: var(--color-danger);
+  --font-serif: var(--font-serif-stack);
+  --font-sans: var(--font-sans-stack);
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-espresso);
+  font-family: var(--font-sans-stack);
+}
+
+h1, h2, h3, h4, .font-serif {
+  font-family: var(--font-serif-stack);
+}
