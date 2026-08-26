@@ -2,12 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { getServiceClient } from '@/lib/supabase/server';
-import {
-  ACTIVE_STATUS_FLOW,
-  defaultMessageFor,
-  nextStatus,
-  previousStatus,
-} from '@/lib/orderStatus';
+import { defaultMessageFor, nextStatus, previousStatus } from '@/lib/orderStatus';
 import type {
   FulfillmentMethod,
   GrindType,
@@ -440,5 +435,3 @@ export async function createRoastBatch(input: CreateRoastBatchInput): Promise<Ac
   revalidatePath('/admin/inventory');
   return { success: true, data: { batchId } };
 }
-
-export { ACTIVE_STATUS_FLOW };
