@@ -53,8 +53,8 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
           setForm({ name: '', origin: '', region: '', process: '', supplier: '', current_weight_g: 0, reorder_threshold_g: 0, cost_per_lb: 0 });
           router.refresh();
         }
-      } catch {
-        setError('Could not reach the database. Check your Supabase environment variables.');
+      } catch (err) {
+        setError(`Server error: ${err instanceof Error ? err.message : String(err)}`);
       }
     });
   }
@@ -70,8 +70,8 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
         const result = await adjustGreenCoffeeLot(id, amount, reason);
         if (!result.success) setError(result.error);
         else router.refresh();
-      } catch {
-        setError('Could not reach the database. Check your Supabase environment variables.');
+      } catch (err) {
+        setError(`Server error: ${err instanceof Error ? err.message : String(err)}`);
       }
     });
   }
@@ -191,8 +191,8 @@ function PackagingSection({ items }: { items: PackagingItem[] }) {
           setForm({ name: '', category: '', current_quantity: 0, reorder_threshold: 0 });
           router.refresh();
         }
-      } catch {
-        setError('Could not reach the database. Check your Supabase environment variables.');
+      } catch (err) {
+        setError(`Server error: ${err instanceof Error ? err.message : String(err)}`);
       }
     });
   }
@@ -208,8 +208,8 @@ function PackagingSection({ items }: { items: PackagingItem[] }) {
         const result = await adjustPackagingItem(id, amount, reason);
         if (!result.success) setError(result.error);
         else router.refresh();
-      } catch {
-        setError('Could not reach the database. Check your Supabase environment variables.');
+      } catch (err) {
+        setError(`Server error: ${err instanceof Error ? err.message : String(err)}`);
       }
     });
   }
