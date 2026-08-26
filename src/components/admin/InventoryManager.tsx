@@ -45,12 +45,16 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
   function submitNewLot() {
     setError('');
     startTransition(async () => {
-      const result = await createGreenCoffeeLot(form);
-      if (!result.success) setError(result.error);
-      else {
-        setShowForm(false);
-        setForm({ name: '', origin: '', region: '', process: '', supplier: '', current_weight_g: 0, reorder_threshold_g: 0, cost_per_lb: 0 });
-        router.refresh();
+      try {
+        const result = await createGreenCoffeeLot(form);
+        if (!result.success) setError(result.error);
+        else {
+          setShowForm(false);
+          setForm({ name: '', origin: '', region: '', process: '', supplier: '', current_weight_g: 0, reorder_threshold_g: 0, cost_per_lb: 0 });
+          router.refresh();
+        }
+      } catch {
+        setError('Could not reach the database. Check your Supabase environment variables.');
       }
     });
   }
@@ -62,9 +66,13 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
     if (Number.isNaN(amount) || amount === 0) return;
     const reason = window.prompt('Reason for this adjustment:') || 'Manual adjustment';
     startTransition(async () => {
-      const result = await adjustGreenCoffeeLot(id, amount, reason);
-      if (!result.success) setError(result.error);
-      else router.refresh();
+      try {
+        const result = await adjustGreenCoffeeLot(id, amount, reason);
+        if (!result.success) setError(result.error);
+        else router.refresh();
+      } catch {
+        setError('Could not reach the database. Check your Supabase environment variables.');
+      }
     });
   }
 
@@ -175,12 +183,16 @@ function PackagingSection({ items }: { items: PackagingItem[] }) {
   function submitNewItem() {
     setError('');
     startTransition(async () => {
-      const result = await createPackagingItem(form);
-      if (!result.success) setError(result.error);
-      else {
-        setShowForm(false);
-        setForm({ name: '', category: '', current_quantity: 0, reorder_threshold: 0 });
-        router.refresh();
+      try {
+        const result = await createPackagingItem(form);
+        if (!result.success) setError(result.error);
+        else {
+          setShowForm(false);
+          setForm({ name: '', category: '', current_quantity: 0, reorder_threshold: 0 });
+          router.refresh();
+        }
+      } catch {
+        setError('Could not reach the database. Check your Supabase environment variables.');
       }
     });
   }
@@ -192,9 +204,13 @@ function PackagingSection({ items }: { items: PackagingItem[] }) {
     if (Number.isNaN(amount) || amount === 0) return;
     const reason = window.prompt('Reason for this adjustment:') || 'Manual adjustment';
     startTransition(async () => {
-      const result = await adjustPackagingItem(id, amount, reason);
-      if (!result.success) setError(result.error);
-      else router.refresh();
+      try {
+        const result = await adjustPackagingItem(id, amount, reason);
+        if (!result.success) setError(result.error);
+        else router.refresh();
+      } catch {
+        setError('Could not reach the database. Check your Supabase environment variables.');
+      }
     });
   }
 
