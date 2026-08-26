@@ -56,8 +56,8 @@ export default function RoastBatchManager({
         }
         setShowForm(false);
         router.refresh();
-      } catch {
-        setError('Could not reach the database. Check your Supabase environment variables.');
+      } catch (err) {
+        setError(`Server error: ${err instanceof Error ? err.message : String(err)}`);
       }
     });
   }
