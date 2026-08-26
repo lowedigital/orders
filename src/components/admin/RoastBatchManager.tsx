@@ -43,16 +43,21 @@ export default function RoastBatchManager({
       return;
     }
     startTransition(async () => {
-      const result = await createRoastBatch({
-        ...form,
-        product_code: productCode(selectedProduct?.name ?? 'XX'),
-        roasted_weight_g: form.roasted_weight_g || undefined,
-        end_temp_f: form.end_temp_f || undefined,
-      });
-      if (!result.success) setError(result.error);
-      else {
+      try {
+        const result = await createRoastBatch({
+          ...form,
+          product_code: productCode(selectedProduct?.name ?? 'XX'),
+          roasted_weight_g: form.roasted_weight_g || undefined,
+          end_temp_f: form.end_temp_f || undefined,
+        });
+        if (!result.success) {
+          setError(result.error);
+          return;
+        }
         setShowForm(false);
         router.refresh();
+      } catch {
+        setError('Could not reach the database. Check your Supabase environment variables.');
       }
     });
   }
