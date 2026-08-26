@@ -51,9 +51,13 @@ export default function OrderDetail({
   function run(action: () => Promise<{ success: boolean; error?: string }>) {
     setError('');
     startTransition(async () => {
-      const result = await action();
-      if (!result.success) setError(result.error || 'Something went wrong.');
-      else refresh();
+      try {
+        const result = await action();
+        if (!result.success) setError(result.error || 'Something went wrong.');
+        else refresh();
+      } catch {
+        setError('Could not reach the database. Check your Supabase environment variables.');
+      }
     });
   }
 
