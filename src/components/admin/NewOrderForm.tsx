@@ -80,10 +80,8 @@ export default function NewOrderForm({ products }: { products: { id: string; nam
       }
 
       router.push(`/admin/orders/${result.data.orderId}`);
-    } catch {
-      setError(
-        'Could not reach the database. Check that SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set correctly in your deployment.'
-      );
+    } catch (err) {
+      setError(`Server error: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }
