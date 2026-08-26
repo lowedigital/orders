@@ -55,8 +55,8 @@ export default function OrderDetail({
         const result = await action();
         if (!result.success) setError(result.error || 'Something went wrong.');
         else refresh();
-      } catch {
-        setError('Could not reach the database. Check your Supabase environment variables.');
+      } catch (err) {
+        setError(`Server error: ${err instanceof Error ? err.message : String(err)}`);
       }
     });
   }
