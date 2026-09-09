@@ -31,7 +31,7 @@ export const STATUS_META: Record<OrderStatus, StatusMeta> = {
   },
   confirmed: {
     label: 'Confirmed',
-    defaultPublicMessage: 'Your order has been confirmed.',
+    defaultPublicMessage: 'Your order has been confirmed, Roasting will happen on Saturday.',
     advanceButtonLabel: 'QUEUE FOR ROAST',
   },
   awaiting_roast: {
