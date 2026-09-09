@@ -33,6 +33,22 @@ export default function TrackingTimeline({ order }: Props) {
         </div>
       )}
 
+      {order.public_notes.length > 0 && (
+        <div className="mt-4 border-t border-sand pt-6">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-roast-light">
+            Updates from the roastery
+          </p>
+          <div className="space-y-3">
+            {order.public_notes.map((note, i) => (
+              <div key={i} className="rounded-lg bg-cream p-3 text-sm">
+                <p className="text-espresso-soft">{note.content}</p>
+                <p className="mt-1 text-xs text-roast-light">{formatDateTime(note.created_at)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <ol className="relative">
         {ACTIVE_STATUS_FLOW.map((step, idx) => {
           const isCompleted = idx < currentIdx || order.status === 'delivered';
@@ -96,22 +112,6 @@ export default function TrackingTimeline({ order }: Props) {
           );
         })}
       </ol>
-
-      {order.public_notes.length > 0 && (
-        <div className="mt-4 border-t border-sand pt-6">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-roast-light">
-            Updates from the roastery
-          </p>
-          <div className="space-y-3">
-            {order.public_notes.map((note, i) => (
-              <div key={i} className="rounded-lg bg-cream p-3 text-sm">
-                <p className="text-espresso-soft">{note.content}</p>
-                <p className="mt-1 text-xs text-roast-light">{formatDateTime(note.created_at)}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
