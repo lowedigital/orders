@@ -100,6 +100,7 @@ export interface GreenCoffeeLot {
   current_weight_g: number;
   reorder_threshold_g: number;
   cost_per_lb: number;
+  product_id?: string | null;
   created_at: string;
   updated_at: string;
 }
