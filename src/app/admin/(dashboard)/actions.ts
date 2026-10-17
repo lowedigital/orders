@@ -273,9 +273,11 @@ export interface CreateGreenCoffeeInput {
   current_weight_g: number;
   reorder_threshold_g: number;
   cost_per_lb: number;
+  product_id: string;
 }
 
 export async function createGreenCoffeeLot(input: CreateGreenCoffeeInput): Promise<ActionResult> {
+  if (!input.product_id) return { success: false, error: 'Please choose which product this lot is for.' };
   const supabase = getServiceClient();
   const { error } = await supabase.from('green_coffee_inventory').insert(input);
   if (error) return { success: false, error: error.message };
