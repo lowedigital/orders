@@ -11,22 +11,26 @@ import {
 import { formatWeightFromGrams } from '@/lib/format';
 import type { GreenCoffeeLot, PackagingItem } from '@/lib/types';
 
+type ProductOption = { id: string; name: string };
+
 export default function InventoryManager({
   greenCoffee,
   packaging,
+  products,
 }: {
   greenCoffee: GreenCoffeeLot[];
   packaging: PackagingItem[];
+  products: ProductOption[];
 }) {
   return (
     <div className="space-y-10">
-      <GreenCoffeeSection lots={greenCoffee} />
+      <GreenCoffeeSection lots={greenCoffee} products={products} />
       <PackagingSection items={packaging} />
     </div>
   );
 }
 
-function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
+function GreenCoffeeSection({ lots, products }: { lots: GreenCoffeeLot[]; products: ProductOption[] }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showForm, setShowForm] = useState(false);
@@ -39,8 +43,10 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
     current_weight_g: 0,
     reorder_threshold_g: 0,
     cost_per_lb: 0,
+    product_id: '',
   });
   const [error, setError] = useState('');
+  const productNames = new Map(products.map((p) => [p.id, p.name]));
 
   function submitNewLot() {
     setError('');
@@ -50,7 +56,7 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
         if (!result.success) setError(result.error);
         else {
           setShowForm(false);
-          setForm({ name: '', origin: '', region: '', process: '', supplier: '', current_weight_g: 0, reorder_threshold_g: 0, cost_per_lb: 0 });
+          setForm({ name: '', origin: '', region: '', process: '', supplier: '', current_weight_g: 0, reorder_threshold_g: 0, cost_per_lb: 0, product_id: '' });
           router.refresh();
         }
       } catch (err) {
@@ -116,8 +122,21 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
             onChange={(e) => setForm({ ...form, cost_per_lb: Number(e.target.value) })}
             className={inputCls}
           />
+          <select
+            value={form.product_id}
+            onChange={(e) => setForm({ ...form, product_id: e.target.value })}
+            className={inputCls}
+            aria-label="Product"
+          >
+            <option value="">Product (required)…</option>
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
           <button
-            disabled={isPending || !form.name}
+            disabled={isPending || !form.name || !form.product_id}
             onClick={submitNewLot}
             className="rounded-lg bg-espresso px-4 py-2 text-sm font-medium text-cream hover:bg-roast disabled:opacity-60 sm:col-span-4"
           >
@@ -127,11 +146,12 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
       )}
 
       <div className="overflow-x-auto rounded-xl border border-sand bg-cream-card">
-        <table className="w-full min-w-[700px] text-left text-sm">
+        <table className="w-full min-w-[800px] text-left text-sm">
           <thead>
             <tr className="border-b border-sand text-xs uppercase tracking-wide text-roast-light">
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Origin</th>
+              <th className="px-4 py-3">Product</th>
               <th className="px-4 py-3">Current</th>
               <th className="px-4 py-3">Threshold</th>
               <th className="px-4 py-3">Cost/lb</th>
@@ -148,6 +168,13 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
                     {low && <span className="ml-2 rounded-full bg-danger/10 px-2 py-0.5 text-xs font-semibold text-danger">LOW STOCK</span>}
                   </td>
                   <td className="px-4 py-3">{[lot.origin, lot.region].filter(Boolean).join(', ')}</td>
+                  <td className="px-4 py-3">
+                    {lot.product_id && productNames.get(lot.product_id) ? (
+                      productNames.get(lot.product_id)
+                    ) : (
+                      <span className="rounded-full bg-danger/10 px-2 py-0.5 text-xs font-semibold text-danger">No product assigned</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3">{formatWeightFromGrams(Number(lot.current_weight_g))}</td>
                   <td className="px-4 py-3">{formatWeightFromGrams(Number(lot.reorder_threshold_g))}</td>
                   <td className="px-4 py-3">${Number(lot.cost_per_lb).toFixed(2)}</td>
@@ -161,7 +188,7 @@ function GreenCoffeeSection({ lots }: { lots: GreenCoffeeLot[] }) {
             })}
             {lots.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-6 text-center text-espresso-soft">
+                <td colSpan={7} className="px-4 py-6 text-center text-espresso-soft">
                   No green coffee lots yet.
                 </td>
               </tr>
