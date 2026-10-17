@@ -3,9 +3,10 @@ import InventoryManager from '@/components/admin/InventoryManager';
 
 export default async function InventoryPage() {
   const supabase = getServiceClient();
-  const [{ data: greenCoffee }, { data: packaging }] = await Promise.all([
+  const [{ data: greenCoffee }, { data: packaging }, { data: products }] = await Promise.all([
     supabase.from('green_coffee_inventory').select('*').order('name'),
     supabase.from('packaging_inventory').select('*').order('name'),
+    supabase.from('products').select('id, name').eq('active', true).order('name'),
   ]);
 
   return (
@@ -14,7 +15,7 @@ export default async function InventoryPage() {
         <h1 className="font-serif text-2xl text-espresso">Inventory</h1>
         <p className="text-sm text-espresso-soft">Green coffee and packaging stock, with reorder alerts.</p>
       </div>
-      <InventoryManager greenCoffee={greenCoffee ?? []} packaging={packaging ?? []} />
+      <InventoryManager greenCoffee={greenCoffee ?? []} packaging={packaging ?? []} products={products ?? []} />
     </div>
   );
 }
